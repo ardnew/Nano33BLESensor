@@ -3,9 +3,9 @@
   Copyright (c) 2020 Dale Giancono. All rights reserved..
 
   This class reads temperature data from the on board Nano 33 BLE
-  Sense temperature sensor using Mbed OS. It stores the results in a ring 
+  Sense temperature sensor using Mbed OS. It stores the results in a ring
   buffer (within the Nano33BLESensorBuffer Class) which can be accessed
-  in a manner with softer time constraints than other implementations. 
+  in a manner with softer time constraints than other implementations.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -24,25 +24,23 @@
 /*****************************************************************************/
 /*INLCUDE GUARD                                                              */
 /*****************************************************************************/
-/* Update these names to match the name of the file */ 
+/* Update these names to match the name of the file */
 #ifndef NANO33BLETEMPERATURE_H_
 #define NANO33BLETEMPERATURE_H_
 
 /*****************************************************************************/
 /*INLCUDES                                                                   */
 /*****************************************************************************/
-#include "Nano33BLESensorBuffer.h"
-#include "Thread.h"
+#include "Nano33BLESensor.h"
 
 /*****************************************************************************/
 /*MACROS                                                                     */
 /*****************************************************************************/
 /**
  * This macro is required. It defines the wait period between sensor reads.
- * Update to the value you need based on how fast the sensor can read data.  
+ * Update to the value you need based on how fast the sensor can read data.
  */
-#define DEFAULT_TEMPERATURE_READ_PERIOD_MS                (2000U)
-#define DEFAULT_TEMPERATURE_THREAD_STACK_SIZE_BYTES       (1024U) 
+#define DEFAULT_TEMPERATURE_READ_PERIOD_MS (2000U)
 
 /*****************************************************************************/
 /*GLOBAL Data                                                                */
@@ -52,7 +50,7 @@
 /*CLASS DECLARATION                                                          */
 /*****************************************************************************/
 /**
- * This class defines the data types that the sensor will ultimately give us 
+ * This class defines the data types that the sensor will ultimately give us
  * after a read operation. Update it to your sensor requirements and call it
  * whatever you like. Make sure the members are public.
  */
@@ -67,55 +65,25 @@ class Nano33BLETemperatureData
 
 /**
  * @brief This class reads temperature data from the on board Nano 33 BLE
- * Sense temperature sensor using Mbed OS. It stores the results in a ring 
+ * Sense temperature sensor using Mbed OS. It stores the results in a ring
  * buffer (within the Nano33BLESensorBuffer Class) which can be accessed
- * in a manner with softer time constraints than other implementations. 
+ * in a manner with softer time constraints than other implementations.
  */
-class Nano33BLETemperature: public Nano33BLESensorBuffer<Nano33BLETemperatureData>
+class Nano33BLETemperature: public Nano33BLESensor
+  <Nano33BLETemperature, Nano33BLETemperatureData, DEFAULT_TEMPERATURE_READ_PERIOD_MS>
 {
-  public:
-    /**
-     * @brief Initialises the sensor and starts the Mbed OS Thread.
-     * 
-     */
-    void begin()
-    {
-      init();
-      readThread.start(mbed::callback(Nano33BLETemperature::readFunction, this));
-    }
-
-    Nano33BLETemperature(
-      uint32_t readPeriod_ms = DEFAULT_TEMPERATURE_READ_PERIOD_MS,
-      osPriority threadPriority = osPriorityNormal,
-      uint32_t threadSize = DEFAULT_TEMPERATURE_THREAD_STACK_SIZE_BYTES) :
-        readPeriod(readPeriod_ms),
-        readThread(
-        threadPriority,
-        threadSize){};
-
-  private:
+  protected:
     /**
      * @brief Initialises the accelerometer sensor.
-     * 
+     *
      */
-    void init(void);
+    void init(void) override;
     /**
-     * @brief Takes one reading from the accelerometer sensor if a reading 
+     * @brief Takes one reading from the accelerometer sensor if a reading
      * is available.
-     * 
+     *
      */
-    void read(void);
-
-    static void readFunction(Nano33BLETemperature *instance)
-    {
-      while(1)
-      {
-          instance->read();
-      }
-    }
-
-    uint32_t readPeriod;
-    rtos::Thread readThread;
+    void read(void) override;
 };
 
 extern Nano33BLETemperature Temperature;

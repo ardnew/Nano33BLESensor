@@ -3,9 +3,9 @@
   Copyright (c) 2020 Dale Giancono. All rights reserved..
 
   This class reads proximity data from the on board Nano 33 BLE
-  Sense proximity sensor using Mbed OS. It stores the results in a ring 
+  Sense proximity sensor using Mbed OS. It stores the results in a ring
   buffer (within the Nano33BLESensorBuffer Class) which can be accessed
-  in a manner with softer time constraints than other implementations. 
+  in a manner with softer time constraints than other implementations.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -24,31 +24,29 @@
 /*****************************************************************************/
 /*INLCUDE GUARD                                                              */
 /*****************************************************************************/
-/* Update these names to match the name of the file */ 
+/* Update these names to match the name of the file */
 #ifndef NANO33BLEPROXIMITY_H_
 #define NANO33BLEPROXIMITY_H_
 
 /*****************************************************************************/
 /*INLCUDES                                                                   */
 /*****************************************************************************/
-#include "Nano33BLESensorBuffer.h"
-#include "Thread.h"
+#include "Nano33BLESensor.h"
 
 /*****************************************************************************/
 /*MACROS                                                                     */
 /*****************************************************************************/
-/* 
+/*
  * As per Arduino_APDS9960.h, 0=100%, 1=150%, 2=200%, 3=300%. Obviously more
- * boost results in more power consumption. 
+ * boost results in more power consumption.
  */
 #define IR_LED_BOOST_VALUE      (0U)
 
 /**
  * This macro is required. It defines the wait period between sensor reads.
- * Update to the value you need based on how fast the sensor can read data.  
+ * Update to the value you need based on how fast the sensor can read data.
  */
-#define DEFAULT_PROXIMITY_READ_PERIOD_MS                (40U)
-#define DEFAULT_PROXIMITY_THREAD_STACK_SIZE_BYTES       (1024U) 
+#define DEFAULT_PROXIMITY_READ_PERIOD_MS (40U)
 
 /*****************************************************************************/
 /*GLOBAL Data                                                                */
@@ -58,7 +56,7 @@
 /*CLASS DECLARATION                                                          */
 /*****************************************************************************/
 /**
- * This class defines the data types that the sensor will ultimately give us 
+ * This class defines the data types that the sensor will ultimately give us
  * after a read operation. Update it to your sensor requirements and call it
  * whatever you like. Make sure the members are public.
  */
@@ -71,57 +69,28 @@ class Nano33BLEProximityData
 };
 
 /**
- * This class declares the init and read functions your sensor will use to 
+ * This class declares the init and read functions your sensor will use to
  * initialise the sensor and get the data. All you have to do is change the
- * class name what a name you like 
- * (currently "Nano33BLEYOURCLASSNAMEHERE"), and update the 
- * "Nano33BLEYOURDATACLASSNAMEHERE" name to the name you defined in 
+ * class name what a name you like
+ * (currently "Nano33BLEYOURCLASSNAMEHERE"), and update the
+ * "Nano33BLEYOURDATACLASSNAMEHERE" name to the name you defined in
  * the section above.
  */
-class Nano33BLEProximity: public Nano33BLESensorBuffer<Nano33BLEProximityData>
+class Nano33BLEProximity: public Nano33BLESensor
+  <Nano33BLEProximity, Nano33BLEProximityData, DEFAULT_PROXIMITY_READ_PERIOD_MS>
 {
-  public:
-   /**
-     * @brief Initialises the sensor and starts the Mbed OS Thread.
-     * 
-     */
-    void begin()
-    {
-      init();
-      readThread.start(mbed::callback(Nano33BLEProximity::readFunction, this));
-    }
-
-    Nano33BLEProximity(
-      uint32_t readPeriod_ms = DEFAULT_PROXIMITY_READ_PERIOD_MS,
-      osPriority threadPriority = osPriorityNormal,
-      uint32_t threadSize = DEFAULT_PROXIMITY_THREAD_STACK_SIZE_BYTES) :
-        readPeriod(readPeriod_ms),
-        readThread(
-        threadPriority,
-        threadSize){};
-  private:
+  protected:
     /**
      * @brief Initialises the accelerometer sensor.
-     * 
+     *
      */
-    void init(void);
+    void init(void) override;
     /**
-     * @brief Takes one reading from the accelerometer sensor if a reading 
+     * @brief Takes one reading from the accelerometer sensor if a reading
      * is available.
-     * 
+     *
      */
-    void read(void);
-
-    static void readFunction(Nano33BLEProximity *instance)
-    {
-      while(1)
-      {
-          instance->read();
-      }
-    }
-
-    uint32_t readPeriod;
-    rtos::Thread readThread;
+    void read(void) override;
 };
 
 extern Nano33BLEProximity Proximity;

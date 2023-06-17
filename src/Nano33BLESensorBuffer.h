@@ -59,17 +59,20 @@ class Nano33BLESensorBuffer
 /*****************************************************************************/
 /*CLASS MEMBER FUNCTION IMPLEMENTATION                                       */
 /*****************************************************************************/
-template<class T> uint32_t Nano33BLESensorBuffer<T>::getAvailableDataSize(void)
+template<class T>
+uint32_t Nano33BLESensorBuffer<T>::getAvailableDataSize(void)
 {
     return this->buffer.size();
 }
 
-template<class T> bool Nano33BLESensorBuffer<T>::pop(T& buffer)
+template<class T>
+bool Nano33BLESensorBuffer<T>::pop(T& buffer)
 {
     return this->buffer.pop(buffer);
 }
 
-template<class T> uint32_t Nano33BLESensorBuffer<T>::popMultiple(T& buffer, uint32_t size)
+template<class T>
+uint32_t Nano33BLESensorBuffer<T>::popMultiple(T& buffer, uint32_t size)
 {
     uint32_t availableData;
     uint32_t readData;
@@ -93,7 +96,8 @@ template<class T> uint32_t Nano33BLESensorBuffer<T>::popMultiple(T& buffer, uint
     return readData;
 }
 
-template<class T> void Nano33BLESensorBuffer<T>::push(T& data)
+template<class T>
+void Nano33BLESensorBuffer<T>::push(T& data)
 {
     this->buffer.push(data);
     return;

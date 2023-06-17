@@ -3,9 +3,9 @@
   Copyright (c) 2020 Dale Giancono. All rights reserved..
 
   This class reads magnetic data from the on board Nano 33 BLE
-  Sense IMU using Mbed OS. It stores the results in a ring 
+  Sense IMU using Mbed OS. It stores the results in a ring
   buffer (within the Nano33BLESensorBuffer Class) which can be accessed
-  in a manner with softer time constraints than other implementations. 
+  in a manner with softer time constraints than other implementations.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -30,19 +30,16 @@
 /*****************************************************************************/
 /*INLCUDES                                                                   */
 /*****************************************************************************/
-/* These are required, do not remove them */
-#include "Nano33BLESensorBuffer.h"
-#include "Thread.h"
+#include "Nano33BLESensor.h"
 
 /*****************************************************************************/
 /*MACROS                                                                     */
 /*****************************************************************************/
 /**
  * This macro is required. It defines the wait period between sensor reads.
- * Update to the value you need based on how fast the sensor can read data.  
+ * Update to the value you need based on how fast the sensor can read data.
  */
-#define DEFAULT_MAGNETIC_READ_PERIOD_MS                (40U)
-#define DEFAULT_MAGNETIC_THREAD_STACK_SIZE_BYTES       (1024U) 
+#define DEFAULT_MAGNETIC_READ_PERIOD_MS (40U)
 
 /*****************************************************************************/
 /*GLOBAL Data                                                                */
@@ -52,7 +49,7 @@
 /*CLASS DECLARATION                                                          */
 /*****************************************************************************/
 /**
- * This class defines the data types that the sensor will ultimately give us 
+ * This class defines the data types that the sensor will ultimately give us
  * after a read operation. Update it to your sensor requirements and call it
  * whatever you like. Make sure the members are public.
  */
@@ -68,54 +65,25 @@ class Nano33BLEMagneticData
 
 /**
  * @brief This class reads magnetic data from the on board Nano 33 BLE
- * Sense IMU using Mbed OS. It stores the results in a ring 
+ * Sense IMU using Mbed OS. It stores the results in a ring
  * buffer (within the Nano33BLESensorBuffer Class) which can be accessed
- * in a manner with softer time constraints than other implementations. 
+ * in a manner with softer time constraints than other implementations.
  */
-class Nano33BLEMagnetic: public Nano33BLESensorBuffer<Nano33BLEMagneticData>
+class Nano33BLEMagnetic: public Nano33BLESensor
+  <Nano33BLEMagnetic, Nano33BLEMagneticData, DEFAULT_MAGNETIC_READ_PERIOD_MS>
 {
-  public:
-   /**
-     * @brief Initialises the sensor and starts the Mbed OS Thread.
-     * 
-     */
-    void begin()
-    {
-      init();
-      readThread.start(mbed::callback(Nano33BLEMagnetic::readFunction, this));
-    }
-
-    Nano33BLEMagnetic(
-      uint32_t readPeriod_ms = DEFAULT_MAGNETIC_READ_PERIOD_MS,
-      osPriority threadPriority = osPriorityNormal,
-      uint32_t threadSize = DEFAULT_MAGNETIC_THREAD_STACK_SIZE_BYTES) :
-        readPeriod(readPeriod_ms),
-        readThread(
-        threadPriority,
-        threadSize){};
-  private:
+  protected:
     /**
      * @brief Initialises the accelerometer sensor.
-     * 
+     *
      */
-    void init(void);
+    void init(void) override;
     /**
-     * @brief Takes one reading from the accelerometer sensor if a reading 
+     * @brief Takes one reading from the accelerometer sensor if a reading
      * is available.
-     * 
+     *
      */
-    void read(void);
-
-    static void readFunction(Nano33BLEMagnetic *instance)
-    {
-      while(1)
-      {
-          instance->read();
-      }
-    }
-
-    uint32_t readPeriod;
-    rtos::Thread readThread;
+    void read(void) override;
 };
 
 extern Nano33BLEMagnetic Magnetic;

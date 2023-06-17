@@ -3,7 +3,7 @@
   Copyright (c) 2020 Dale Giancono. All rights reserved..
 
   This class reads gesture data from the on board Nano 33 BLE
-  Sense gesture sensor using Mbed OS. It stores the results in a ring 
+  Sense gesture sensor using Mbed OS. It stores the results in a ring
   buffer (within the Nano33BLESensorBuffer Class) which can be accessed
   in a manner with softer time constraints than other implementations.
 
@@ -24,26 +24,26 @@
 /*****************************************************************************/
 /*INLCUDE GUARD                                                              */
 /*****************************************************************************/
-/* Update these names to match the name of the file */ 
+/* Update these names to match the name of the file */
 #ifndef NANO33BLEGESTURE_H_
 #define NANO33BLEGESTURE_H_
 
 /*****************************************************************************/
 /*INLCUDES                                                                   */
 /*****************************************************************************/
-#include "Nano33BLESensorBuffer.h"
 #include <Arduino_APDS9960.h>
-#include "Thread.h"
+
+#include "Nano33BLESensor.h"
 
 /*****************************************************************************/
 /*MACROS                                                                     */
 /*****************************************************************************/
-/* 
+/*
  * As per Arduino_APDS9960.h, 0=100%, 1=150%, 2=200%, 3=300%. Obviously more
- * boost results in more power consumption. 
+ * boost results in more power consumption.
  */
 #define IR_LED_BOOST_VALUE      (0U)
-/* 
+/*
  * Set sensitivity from 0 to 100. Higher is more sensitive. In
  * my experience it requires quite a bit of experimentation to
  * get this right, as if it is too sensitive gestures will always
@@ -54,10 +54,9 @@
 #define IR_GESTURE_SENSITIVITY  (50U)
 /**
  * This macro is required. It defines the wait period between sensor reads.
- * Update to the value you need based on how fast the sensor can read data.  
+ * Update to the value you need based on how fast the sensor can read data.
  */
-#define DEFAULT_GESTURE_READ_PERIOD_MS                (10U)
-#define DEFAULT_GESTURE_THREAD_STACK_SIZE_BYTES       (1024U) 
+#define DEFAULT_GESTURE_READ_PERIOD_MS (10U)
 
 /*****************************************************************************/
 /*GLOBAL Data                                                                */
@@ -67,7 +66,7 @@
 /*CLASS DECLARATION                                                          */
 /*****************************************************************************/
 /**
- * This class defines the data types that the sensor will ultimately give us 
+ * This class defines the data types that the sensor will ultimately give us
  * after a read operation. Update it to your sensor requirements and call it
  * whatever you like. Make sure the members are public.
  */
@@ -89,54 +88,25 @@ class Nano33BLEGestureData
 
 /**
  * @brief This class reads gesture data from the on board Nano 33 BLE
- * Sense APDS9960 using Mbed OS. It stores the results in a ring 
+ * Sense APDS9960 using Mbed OS. It stores the results in a ring
  * buffer (within the Nano33BLESensorBuffer Class) which can be accessed
- * in a manner with softer time constraints than other implementations. 
+ * in a manner with softer time constraints than other implementations.
  */
-class Nano33BLEGesture: public Nano33BLESensorBuffer<Nano33BLEGestureData>
+class Nano33BLEGesture: public Nano33BLESensor
+  <Nano33BLEGesture, Nano33BLEGestureData, DEFAULT_GESTURE_READ_PERIOD_MS>
 {
-  public:
-   /**
-     * @brief Initialises the sensor and starts the Mbed OS Thread.
-     * 
-     */
-    void begin()
-    {
-      init();
-      readThread.start(mbed::callback(Nano33BLEGesture::readFunction, this));
-    }
-
-    Nano33BLEGesture(
-      uint32_t readPeriod_ms = DEFAULT_GESTURE_READ_PERIOD_MS,
-      osPriority threadPriority = osPriorityNormal,
-      uint32_t threadSize = DEFAULT_GESTURE_THREAD_STACK_SIZE_BYTES) :
-        readPeriod(readPeriod_ms),
-        readThread(
-        threadPriority,
-        threadSize){};
-  private:
+  protected:
     /**
      * @brief Initialises the accelerometer sensor.
-     * 
+     *
      */
-    void init(void);
+    void init(void) override;
     /**
-     * @brief Takes one reading from the accelerometer sensor if a reading 
+     * @brief Takes one reading from the accelerometer sensor if a reading
      * is available.
-     * 
+     *
      */
-    void read(void);
-
-    static void readFunction(Nano33BLEGesture *instance)
-    {
-      while(1)
-      {
-          instance->read();
-      }
-    }
-
-    uint32_t readPeriod;
-    rtos::Thread readThread;
+    void read(void) override;
 };
 
 
