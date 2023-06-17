@@ -1,0 +1,2 @@
+nano33ble.build.extra_flags=-D__ARM_ARCH=7 -D__ARM_ARCH_7EM__=1 -D__ARM_FEATURE_DSP=1 -I/opt/arduino/lib/packages/arduino/tools/CMSIS/4.5.0/CMSIS/Include
+nano33ble.compiler.mbed.extra_ldflags=-L/opt/arduino/lib/packages/arduino/tools/CMSIS/4.5.0/CMSIS/Lib/GCC -larm_cortexM4l_math
