@@ -34,7 +34,23 @@ Nano33BLEMicrophoneRMSData	  KEYWORD1
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
-begin	                KEYWORD2
-getAvailableDataSize	KEYWORD2
-pop	                  KEYWORD2
-popMultiple	          KEYWORD2
+start                 KEYWORD2
+init                  KEYWORD2
+begin                 KEYWORD2
+halt                  KEYWORD2
+size                  KEYWORD2
+pop                   KEYWORD2
+push                  KEYWORD2
+
+Accelerometer KEYWORD1
+Barometer     KEYWORD1
+Buffer        KEYWORD1
+Color         KEYWORD1
+Gesture       KEYWORD1
+Gyroscope     KEYWORD1
+Humidity      KEYWORD1
+Magnetometer  KEYWORD1
+Microphone    KEYWORD1
+Proximity     KEYWORD1
+Sensor        KEYWORD1
+Temperature   KEYWORD1

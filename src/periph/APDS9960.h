@@ -5,7 +5,7 @@
 
 #include "periph.h"
 
-// Implements color, gesture, proximity
+// Provides sensors: Color, Gesture, Proximity
 class PeriphAPDS9960: public Periph<APDS9960> {
   using Periph<APDS9960>::Periph;
 };
