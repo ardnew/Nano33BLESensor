@@ -7,11 +7,11 @@
 #include "buffer.h"
 
 typedef std::chrono::duration<uint32_t, std::milli> msec_t; // milliseconds
-inline msec_t msec() { return static_cast<msec_t>(millis()); }
+inline msec_t msecs() { return msec_t{millis()}; }
 
 class SensorData {
 public:
-  SensorData(msec_t const s = msec()): _whence(s) {}
+  SensorData(msec_t const s = msecs()): _whence(s) {}
 protected:
   msec_t _whence;
 };
@@ -21,13 +21,13 @@ template<class T, class D,
 class Sensor: public Buffer<D> {
 public:
   Sensor(uint32_t period = R, osPriority_t priority = P, uint32_t bytesz = S):
-    _period(static_cast<msec_t>(period)), _thread(priority, bytesz) {}
+    _period(msec_t{period}), _thread(priority, bytesz) {}
   static inline void halt() { osSignalWait(0x0001, osWaitForever); }
   void start() {
     init();
-    _thread.start(mbed::callback([this] () {
+    _thread.start(mbed::callback([&] () {
       while (1) {
-        msec_t start = msec();
+        msec_t start = msecs();
         poll(start);
         idle(start); // subtract poll duration from remaining idle time
       }
@@ -43,7 +43,7 @@ private:
   msec_t _period;
   rtos::Thread _thread;
   inline void idle(msec_t const start) {
-    msec_t delta = msec() - start;
+    msec_t delta = msecs() - start;
     msec_t delay = _period; // always restore shortest period
     // increment delay if delta > delay
     delay += delay * (delta / delay);
