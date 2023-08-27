@@ -8,6 +8,7 @@ class HumidityData: public SensorData {
   using SensorData::SensorData;
 public:
   float humidity;
+  using GattType = decltype(humidity);
 };
 
 class Humidity: public Sensor<Humidity, HumidityData> {
@@ -15,7 +16,7 @@ protected:
   void init() override {
     if (!_HTS221.begin()) { halt(); }
   }
-  void poll(msec_t const s) override {
+  void poll(msecu32_t const s) override {
     if (_HTS221.lock()) {
       HumidityData d(s);
       d.humidity = _HTS221.readHumidity();

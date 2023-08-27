@@ -8,6 +8,7 @@ class BarometerData: public SensorData {
   using SensorData::SensorData;
 public:
   float psi;
+  using GattType = decltype(psi);
 };
 
 class Barometer: public Sensor<Barometer, BarometerData> {
@@ -15,7 +16,7 @@ protected:
   void init() override {
     if (!_LPS22HB.begin()) { halt(); }
   }
-  void poll(msec_t const s) override {
+  void poll(msecu32_t const s) override {
     if (_LPS22HB.lock()) {
       BarometerData d(s);
       d.psi = _LPS22HB.readPressure(PSI);

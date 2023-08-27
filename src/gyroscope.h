@@ -10,6 +10,7 @@ public:
   float x;
   float y;
   float z;
+  using GattType = decltype(x);
 };
 
 class Gyroscope: public Sensor<Gyroscope, GyroscopeData> {
@@ -17,7 +18,7 @@ protected:
   void init() override {
     if (!_LSM9DS1.begin()) { halt(); }
   }
-  void poll(msec_t const s) override {
+  void poll(msecu32_t const s) override {
     if (_LSM9DS1.lock()) {
       if (_LSM9DS1.gyroscopeAvailable()) {
         GyroscopeData d(s);

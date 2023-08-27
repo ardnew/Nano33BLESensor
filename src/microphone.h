@@ -10,6 +10,7 @@ class MicrophoneData: public SensorData {
   using SensorData::SensorData;
 public:
   int16_t rms;
+  using GattType = decltype(rms);
 };
 
 class Microphone: public Sensor<Microphone, MicrophoneData> {
@@ -21,7 +22,7 @@ protected:
     if (!_MP34DT05.begin(1, 16000)) { halt(); }
     _MP34DT05.setGain(80);
   }
-  void poll(msec_t const s) override {
+  void poll(msecu32_t const s) override {
     if (_MP34DT05.lock()) {
       MicrophoneData d(s);
       arm_rms_q15(_MP34DT05.buf(), _MP34DT05.buflen(), &d.rms);
