@@ -8,7 +8,7 @@ class ProximityData: public SensorData {
   using SensorData::SensorData;
 public:
   int proximity;
-  using GattType = decltype(proximity);
+  using Type = decltype(proximity);
 };
 
 class Proximity: public Sensor<Proximity, ProximityData> {

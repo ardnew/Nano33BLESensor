@@ -8,7 +8,7 @@ class BarometerData: public SensorData {
   using SensorData::SensorData;
 public:
   float psi;
-  using GattType = decltype(psi);
+  using Type = decltype(psi);
 };
 
 class Barometer: public Sensor<Barometer, BarometerData> {

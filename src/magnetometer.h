@@ -10,7 +10,7 @@ public:
   float x;
   float y;
   float z;
-  using GattType = decltype(x);
+  using Type = decltype(x);
 };
 
 class Magnetometer: public Sensor<Magnetometer, MagnetometerData> {

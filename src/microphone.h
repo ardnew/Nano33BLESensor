@@ -10,7 +10,7 @@ class MicrophoneData: public SensorData {
   using SensorData::SensorData;
 public:
   int16_t rms;
-  using GattType = decltype(rms);
+  using Type = decltype(rms);
 };
 
 class Microphone: public Sensor<Microphone, MicrophoneData> {

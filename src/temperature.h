@@ -8,7 +8,7 @@ class TemperatureData: public SensorData {
   using SensorData::SensorData;
 public:
   float fahrenheit;
-  using GattType = decltype(fahrenheit);
+  using Type = decltype(fahrenheit);
 };
 
 class Temperature: public Sensor<Temperature, TemperatureData> {

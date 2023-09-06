@@ -8,7 +8,7 @@ class GestureData: public SensorData {
   using SensorData::SensorData;
 public:
   int gesture;
-  using GattType = decltype(gesture);
+  using Type = decltype(gesture);
 };
 
 class Gesture: public Sensor<Gesture, GestureData> {

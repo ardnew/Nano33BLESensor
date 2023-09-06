@@ -8,7 +8,7 @@ class HumidityData: public SensorData {
   using SensorData::SensorData;
 public:
   float humidity;
-  using GattType = decltype(humidity);
+  using Type = decltype(humidity);
 };
 
 class Humidity: public Sensor<Humidity, HumidityData> {

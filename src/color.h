@@ -11,7 +11,7 @@ public:
   int g;
   int b;
   int c;
-  using GattType = decltype(r);
+  using Type = decltype(r);
 };
 
 class Color: public Sensor<Color, ColorData> {

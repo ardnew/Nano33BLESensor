@@ -10,7 +10,7 @@ public:
   float x;
   float y;
   float z;
-  using GattType = decltype(x);
+  using Type = decltype(x);
 };
 
 class Gyroscope: public Sensor<Gyroscope, GyroscopeData> {
