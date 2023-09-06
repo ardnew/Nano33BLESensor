@@ -1,7 +1,9 @@
 #include "LPS22HB.h"
 
+#ifndef NO_GLOBAL_NANOSENSORS
 #ifdef ARDUINO_ARDUINO_NANO33BLE
 PeriphLPS22HB _LPS22HB(Wire1);
 #else
 PeriphLPS22HB _LPS22HB(Wire);
 #endif
+#endif // NO_GLOBAL_NANOSENSORS

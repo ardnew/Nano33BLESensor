@@ -2,6 +2,7 @@
 #define buffer_h
 
 #include <CircularBuffer.h>
+#include <cstdint>
 
 template<class T, uint32_t N = 100U>
 class Buffer {

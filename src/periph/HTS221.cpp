@@ -1,7 +1,9 @@
 #include "HTS221.h"
 
+#ifndef NO_GLOBAL_NANOSENSORS
 #ifdef ARDUINO_ARDUINO_NANO33BLE
 PeriphHTS221 _HTS221(Wire1);
 #else
 PeriphHTS221 _HTS221(Wire);
 #endif
+#endif // NO_GLOBAL_NANOSENSORS

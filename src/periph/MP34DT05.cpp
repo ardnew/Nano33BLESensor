@@ -1,7 +1,9 @@
 #include "MP34DT05.h"
 
+#ifndef NO_GLOBAL_NANOSENSORS
 #ifdef ARDUINO_ARDUINO_NANO33BLE
 PeriphMP34DT05<> _MP34DT05(PIN_PDM_DIN, PIN_PDM_CLK, PIN_PDM_PWR);
 #else
 #error unsupported target! (undefined symbol: ARDUINO_ARDUINO_NANO33BLE)
 #endif
+#endif // NO_GLOBAL_NANOSENSORS

@@ -1,7 +1,9 @@
 #include "LSM9DS1.h"
 
+#ifndef NO_GLOBAL_NANOSENSORS
 #ifdef ARDUINO_ARDUINO_NANO33BLE
 PeriphLSM9DS1 _LSM9DS1(Wire1);
 #else
 PeriphLSM9DS1 _LSM9DS1(Wire);
 #endif
+#endif // NO_GLOBAL_NANOSENSORS

@@ -10,7 +10,7 @@ public:
   float x;
   float y;
   float z;
-  using GattType = decltype(x);
+  using GattType = std::array<decltype(x), 3U>;
 };
 
 class Accelerometer: public Sensor<Accelerometer, AccelerometerData> {
